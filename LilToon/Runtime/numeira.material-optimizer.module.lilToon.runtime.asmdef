@@ -1,5 +1,5 @@
 {
-    "name": "numeira.material-optimizer.runtime",
+    "name": "numeira.material-optimizer.module.lilToon.runtime",
     "rootNamespace": "",
     "references": [
         "numeira.material-optimizer.api.runtime"

@@ -1,12 +1,11 @@
 {
-    "name": "numeira.material-optimizer.editor",
+    "name": "numeira.material-optimizer.module.lilToon.editor",
     "rootNamespace": "",
     "references": [
         "numeira.material-optimizer.api",
         "numeira.material-optimizer.api.runtime",
-        "numeira.material-optimizer.runtime",
-        "nadena.dev.ndmf",
-        "nadena.dev.ndmf.vrchat"
+        "numeira.material-optimizer.module.lilToon.runtime",
+        "lilToon.Editor"
     ],
     "includePlatforms": [
         "Editor"

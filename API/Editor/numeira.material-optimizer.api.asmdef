@@ -1,12 +1,8 @@
 {
-    "name": "numeira.material-optimizer.editor",
+    "name": "numeira.material-optimizer.api",
     "rootNamespace": "",
     "references": [
-        "numeira.material-optimizer.api",
-        "numeira.material-optimizer.api.runtime",
-        "numeira.material-optimizer.runtime",
-        "nadena.dev.ndmf",
-        "nadena.dev.ndmf.vrchat"
+        "numeira.material-optimizer.api.runtime"
     ],
     "includePlatforms": [
         "Editor"

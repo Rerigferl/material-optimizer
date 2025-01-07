@@ -1,9 +1,7 @@
 {
-    "name": "numeira.material-optimizer.runtime",
+    "name": "numeira.material-optimizer.api.runtime",
     "rootNamespace": "",
-    "references": [
-        "numeira.material-optimizer.api.runtime"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
