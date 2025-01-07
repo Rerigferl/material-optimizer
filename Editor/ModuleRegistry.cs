@@ -10,16 +10,14 @@ namespace Numeira.MaterialOptimizer;
 [InitializeOnLoad]
 internal static class ModuleRegistry
 {
-
     static ModuleRegistry()
     {
         MaterialOptimizerModuleRegistry.RegisterProxy = default(object).Register;
         MaterialOptimizerModuleRegistry.RegisterWithSettingProxy = default(object).RegisterWithSettings;
 
-        MaterialOptimizerComponent.AddSettingsComponents = default(object).AddSettingsComponent;
-
         foreach (var type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).Where(x => x.GetCustomAttribute<MaterialOptimizerModuleAttribute>() != null))
         {
+            // staticコンストラクタを起動する
             RuntimeHelpers.RunClassConstructor(type.TypeHandle);
         }
     }
@@ -48,18 +46,6 @@ internal static class ModuleRegistry
         return true;
     }
 
-    private static void AddSettingsComponent(this object? __, MaterialOptimizerComponent component)
-    {
-        foreach(var type in settingsTypeMap.Values)
-        {
-            if (!typeof(Component).IsAssignableFrom(type))
-                continue;
-
-            if (!component.TryGetComponent(type, out _))
-                component.gameObject.AddComponent(type);
-        }
-    }
-
     private static int previousModulesVersion = -1;
     public static ReadOnlySpan<MaterialOptimizerModule> Modules
     {
@@ -77,4 +63,20 @@ internal static class ModuleRegistry
     }
 
     public static bool TryGetSettingsType(MaterialOptimizerModule module, out Type result) => settingsTypeMap.TryGetValue(module.QualifiedName, out result);
+
+    public static IEnumerable<Type> SettingsTypes => settingsTypeMap.Values;
+
+    public static MaterialOptimizerSettingsBase? GetOrAddModuleSettings(MaterialOptimizerComponent component, MaterialOptimizerModule module)
+    {
+        if (!TryGetSettingsType(module, out var type))
+            return null;
+
+        if (!component.TryGetComponent(type, out var result))
+        {
+            result = component.gameObject.AddComponent(type);
+            result.hideFlags = HideFlags.HideInInspector | HideFlags.HideInHierarchy;
+        }
+
+        return result as MaterialOptimizerSettingsBase;
+    }
 }

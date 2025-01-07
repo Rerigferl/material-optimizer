@@ -13,7 +13,7 @@ internal sealed class LilToonModule : MaterialOptimizerModule<LilToonSettings>
     public override string DisplayName => "lilToon";
 
     static LilToonModule() 
-        => MaterialOptimizerModuleRegistry.RegisterWithSettings(new LilToonModule());
+        => MaterialOptimizerModuleRegistry.Register<LilToonModule, LilToonSettings>(new());
 
     protected override bool OnFilterMaterial(Material material)
     {

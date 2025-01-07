@@ -1,19 +1,25 @@
 using System;
-using Numeira.MaterialOptimizer.API;
 using UnityEngine;
 
 namespace Numeira.MaterialOptimizer
 {
     [DisallowMultipleComponent]
-    [AddComponentMenu("NDMF/Material Optimizer")]
+    [AddComponentMenu("/Material Optimizer")]
     [ExecuteInEditMode]
     internal sealed class MaterialOptimizerComponent : API.MaterialOptimizerComponent
     {
         public void OnValidate()
         {
-            AddSettingsComponents?.Invoke(this);
+            InternalOnValidate?.Invoke(this);
         }
 
-        internal static Action<MaterialOptimizerComponent>? AddSettingsComponents;
+        public void Reset()
+        {
+            InternalReset?.Invoke(this);
+            OnValidate();
+        }
+
+        internal static Action<MaterialOptimizerComponent>? InternalOnValidate;
+        internal static Action<MaterialOptimizerComponent>? InternalReset;
     }
 }

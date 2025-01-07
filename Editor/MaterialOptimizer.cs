@@ -7,11 +7,11 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.Dynamics;
 
-[assembly: ExportsPlugin(typeof(MaterialOptimizerPluginDefinition))]
+[assembly: ExportsPlugin(typeof(MaterialOptimizer))]
 
 namespace Numeira.MaterialOptimizer;
 
-internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimizerPluginDefinition>
+internal sealed class MaterialOptimizer : Plugin<MaterialOptimizer>
 {
     public override string QualifiedName => "numeira.material-optimizer";
     public override string DisplayName => "Material Optimizer";
@@ -30,7 +30,9 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
 
                 if (ModuleRegistry.TryGetSettingsType(module, out var type))
                 {
-                    module.settings = state.Component.GetComponent(type) ?? state.Component.gameObject.AddComponent(type);
+                    module.settings = (MonoBehaviour)(state.Component.GetComponent(type) ?? state.Component.gameObject.AddComponent(type));
+                    if (!module.settings.enabled)
+                        return;
                 }
                 
                 try
@@ -57,7 +59,7 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
 
     private sealed class Initializer : Pass<Initializer>
     {
-        public override string DisplayName => $"{MaterialOptimizerPluginDefinition.Instance.DisplayName}: Initializing";
+        public override string DisplayName => $"{MaterialOptimizer.Instance.DisplayName}: Initializing";
 
         protected override void Execute(BuildContext context)
         {

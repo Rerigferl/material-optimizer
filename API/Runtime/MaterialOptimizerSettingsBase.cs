@@ -7,6 +7,10 @@ namespace Numeira.MaterialOptimizer.API
     [RequireComponent(typeof(MaterialOptimizerComponent))]
     public abstract class MaterialOptimizerSettingsBase : MonoBehaviour, IEditorOnly
     {
+        private void OnEnable() { }
 
+        [SerializeField]
+        [HideInInspector]
+        internal bool isExpanded = true;
     }
 }

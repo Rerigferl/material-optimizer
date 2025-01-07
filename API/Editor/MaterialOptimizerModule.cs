@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace Numeira.MaterialOptimizer.API;
@@ -17,13 +20,36 @@ public abstract class MaterialOptimizerModule
 
     protected internal virtual void Run(MaterialOptimizerContext context) { }
 
-    internal Component? settings;
+    protected internal virtual void OnGUI(SerializedObject serializedObject) 
+    {
+        var iter = serializedObject.GetIterator();
+        iter.NextVisible(true);
+        int count = 0;
+        while (iter.NextVisible(false))
+        {
+            EditorGUILayout.PropertyField(iter, true);
+            count++;
+        }
+        if (count == 0)
+        {
+            EditorGUILayout.LabelField("No settings available.");
+        }
+    }
+
+    internal MonoBehaviour? settings;
 }
 
-public abstract class MaterialOptimizerModule<TSettings> : MaterialOptimizerModule where TSettings : MaterialOptimizerSettingsBase
+public abstract class MaterialOptimizerModule<TSettings> : MaterialOptimizerModule, IMaterialOptimizerModuleWithSettings where TSettings : MaterialOptimizerSettingsBase
 {
     protected TSettings Settings => (settings as TSettings)!;
+
+    Type IMaterialOptimizerModuleWithSettings.SettingsType => typeof(TSettings);
 }
 
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class MaterialOptimizerModuleAttribute : Attribute { }
+
+internal interface IMaterialOptimizerModuleWithSettings 
+{
+    Type SettingsType { get; }
+}

@@ -7,5 +7,7 @@ namespace Numeira.MaterialOptimizer.API
     public abstract class MaterialOptimizerComponent : MonoBehaviour, IEditorOnly
     {
         internal MaterialOptimizerComponent() { }
+
+        private void OnEnable() { }
     }
 }

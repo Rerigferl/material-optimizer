@@ -6,9 +6,10 @@ using UnityEngine;
 
 namespace Numeira.MaterialOptimizer.Modules
 {
+    [DisallowMultipleComponent]
     public sealed class LilToonSettings : MaterialOptimizerSettingsBase
     {
-        public string? Test;
+
     }
 
     [Flags]
