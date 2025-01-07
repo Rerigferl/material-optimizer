@@ -35,7 +35,7 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
                 
                 try
                 {
-                    module.Run(new MaterialOptimizerContext(list, state.AnimatedProperties));
+                    module.Run(new MaterialOptimizerContext(list, state.AnimatedPropertiesMap));
                 }
                 catch (Exception exception)
                 {
@@ -50,7 +50,8 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
         public MaterialOptimizerComponent? Component;
         public Dictionary<Material, Material> ClonedMaterials = new();
         public Dictionary<MaterialOptimizerModule, List<Material>> ModulesMap = new();
-        public List<string> AnimatedProperties = new();
+        public HashSet<AnimationClip> AnimationClips = new();
+        public Dictionary<Material, List<string>> AnimatedPropertiesMap = new();
         public MaterialOptimizerContext? Context;
     }
 
@@ -65,8 +66,8 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
             if (!TrySetComponentToState(context, state))
                 return;
 
-            if (!TryEnumerateAllIncludeAssets(context, state))
-                return;
+            EnumerateAllIncludeAssets(context, state);
+            ResolveAnimatedProperties(context, state);
         }
 
         private static bool TrySetComponentToState(BuildContext context, SharedState state)
@@ -82,7 +83,7 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
             return true;
         }
 
-        private static bool TryEnumerateAllIncludeAssets(BuildContext context, SharedState state)
+        private static void EnumerateAllIncludeAssets(BuildContext context, SharedState state)
         {
             var cloner = new DeepCloner(x => x switch
             {
@@ -130,8 +131,32 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
                         }
                 }
             }
+        }
 
-            return true;
+        private static void ResolveAnimatedProperties(BuildContext context, SharedState state)
+        {
+            foreach (var clip in state.AnimationClips)
+            {
+                foreach(var binding in AnimationUtility.GetCurveBindings(clip))
+                {
+                    if (!binding.propertyName.StartsWith("material."))
+                        continue;
+
+                    var obj = AnimationUtility.GetAnimatedObject(context.AvatarRootObject, binding);
+                    if (obj is not Renderer renderer)
+                        continue;
+
+                    foreach(var material in renderer.sharedMaterials)
+                    {
+                        if (material == null)
+                            continue;
+
+                        if (!state.AnimatedPropertiesMap.TryGetValue(material, out var list))
+                            state.AnimatedPropertiesMap.Add(material, list = new());
+                        list.Add(binding.propertyName["material.".Length..]);
+                    }
+                }
+            }
         }
 
         private static Material OnCloneMaterial(Material material, BuildContext context, SharedState state)
@@ -160,16 +185,7 @@ internal sealed class MaterialOptimizerPluginDefinition : Plugin<MaterialOptimiz
 
         private static AnimationClip? OnCloneAnimationClip(AnimationClip anim, BuildContext context, SharedState state)
         {
-            const string MaterialAnimationPrefix = "material.";
-            var bindings = AnimationUtility.GetCurveBindings(anim);
-            foreach (var binding in bindings)
-            {
-                var propertyName = binding.propertyName;
-                if (!propertyName.StartsWith(MaterialAnimationPrefix))
-                    continue;
-                state.AnimatedProperties.Add(propertyName[MaterialAnimationPrefix.Length..]);
-            }
-
+            state.AnimationClips.Add(anim);
             return null;
         }
 

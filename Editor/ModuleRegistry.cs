@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using Numeira.MaterialOptimizer.API;
+using Numeira.MaterialOptimizer.API.Internal;
 using UnityEditor;
 using UnityEngine;
 

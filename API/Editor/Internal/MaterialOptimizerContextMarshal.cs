@@ -13,9 +13,12 @@ public static class MaterialOptimizerContextMarshal
         return buffer;
     }
 
-    public static string[] GetAnimatedPropertiesArray(MaterialOptimizerContext context)
+    public static string[]? GetAnimatedPropertiesArray(MaterialOptimizerContext context, Material material)
     {
-        var (buffer, _) = context.animatedProperties;
+        if (!context.animatedPropertiesMap.TryGetValue(material, out var list))
+            return null;
+
+        var (buffer, _) = list;
         return buffer;
     }
 }

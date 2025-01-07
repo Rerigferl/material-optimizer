@@ -1,3 +1,4 @@
+using System;
 using lilToon;
 using Numeira.MaterialOptimizer.API;
 using Numeira.MaterialOptimizer.API.Internal;
@@ -21,9 +22,9 @@ internal sealed class LilToonModule : MaterialOptimizerModule<LilToonSettings>
 
     protected override void Run(MaterialOptimizerContext context)
     {
-        var animatedProperties = MaterialOptimizerContextMarshal.GetAnimatedPropertiesArray(context);
         foreach (var material in context.Materials)
         {
+            var animatedProperties = MaterialOptimizerContextMarshal.GetAnimatedPropertiesArray(context, material) ?? Array.Empty<string>();
             OptimizeMaterial(material, animatedProperties);
         }
     }
