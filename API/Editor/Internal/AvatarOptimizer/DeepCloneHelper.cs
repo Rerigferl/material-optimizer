@@ -10,6 +10,7 @@ using nadena.dev.ndmf;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
+using Object = UnityEngine.Object;
 
 namespace Anatawa12.AvatarOptimizer
 {

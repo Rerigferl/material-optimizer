@@ -2,13 +2,14 @@
     "name": "numeira.material-optimizer.api",
     "rootNamespace": "",
     "references": [
-        "numeira.material-optimizer.api.runtime"
+        "numeira.material-optimizer.api.runtime",
+        "nadena.dev.ndmf"
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": false,

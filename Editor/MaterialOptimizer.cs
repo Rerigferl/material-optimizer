@@ -37,7 +37,7 @@ internal sealed class MaterialOptimizer : Plugin<MaterialOptimizer>
                 
                 try
                 {
-                    module.Run(new MaterialOptimizerContext(list, state.AnimatedPropertiesMap));
+                    module.Run(new MaterialOptimizerContext(list, state.AnimatedPropertiesMap, context.AssetContainer));
                 }
                 catch (Exception exception)
                 {

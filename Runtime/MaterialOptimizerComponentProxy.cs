@@ -9,7 +9,7 @@ namespace Numeira.MaterialOptimizer
     [ExecuteInEditMode]
     internal sealed class MaterialOptimizerComponentProxy : MonoBehaviour, IEditorOnly
     {
-        public void Start()
+        public void Awake()
         {
             bool success = InternalTryAddMaterialOptimizerToAvatar?.Invoke(this) ?? false;
 
