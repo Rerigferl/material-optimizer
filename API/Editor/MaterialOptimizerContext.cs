@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using nadena.dev.ndmf;
 using Numeira.MaterialOptimizer.API.Internal;
 using UnityEditor;
@@ -39,5 +38,18 @@ public sealed class MaterialOptimizerContext
         AssetDatabase.AddObjectToAsset(cloned, AssetContainer);
         ObjectRegistry.RegisterReplacedObject(original, cloned);
         return cloned;
+    }
+
+    public void ReportError(string message, ErrorSeverity severity = ErrorSeverity.Information)
+    {
+        ErrorReport.ReportError(null, (nadena.dev.ndmf.ErrorSeverity)severity, message);
+    }
+
+    public enum ErrorSeverity
+    {
+        Information,
+        NonFatal,
+        Error,
+        InternalError
     }
 }

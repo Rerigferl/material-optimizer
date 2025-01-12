@@ -16,6 +16,17 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "jp.lilxyzw.liltoon",
+            "expression": "0",
+            "define": "LIL_TOON"
+        },
+        {
+            "name": "jp.lilxyzw.liltoon",
+            "expression": "1.8.0",
+            "define": "LIL_TOON_1_8_0"
+        }
+    ],
     "noEngineReferences": false
 }

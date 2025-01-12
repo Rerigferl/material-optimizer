@@ -21,6 +21,8 @@ namespace Numeira.MaterialOptimizer.Modules;
  * 
  */
 
+#if LIL_TOON_1_8_0
+
 [MaterialOptimizerModule]
 internal sealed class LilToonModule : MaterialOptimizerModule<LilToonSettings>
 {
@@ -171,24 +173,4 @@ internal sealed class LilToonModule : MaterialOptimizerModule<LilToonSettings>
         return true;
     }
 }
-
-internal static class Ext
-{
-    public static bool ContainsAny(this string[] values, string value, StringComparison comparison = StringComparison.Ordinal)
-        => ((ReadOnlySpan<string>)values.AsSpan()).ContainsAny(value, comparison);
-
-    public static bool ContainsAny(this ReadOnlySpan<string> values, string value, StringComparison comparison = StringComparison.Ordinal)
-    {
-        foreach(var x in values)
-        {
-            if (x == null)
-                continue;
-            
-            if (x.Contains(value, comparison))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-}
+#endif
